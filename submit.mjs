@@ -11,7 +11,7 @@ async function submit() {
 
   // 1. Prepare the files
   const mainPyPath = path.join(workDir, 'main.py');
-  // No need to copy engineSrc, we are using main.py in workDir
+  // Use main.py directly from workDir
   console.log("Using main.py from work directory.");
 
   // 2. Prepare transcripts
@@ -32,9 +32,7 @@ async function submit() {
   const keypairBytes = fs.readFileSync(keypairPath);
   const signer = signerFromKeypairBytes(keypairBytes);
 
-  const client = createClient({
-    signer: signer
-  });
+  const client = createClient({});
 
   try {
     console.log(`Submitting to ${competitionSlug}...`);
@@ -45,6 +43,10 @@ async function submit() {
         competition: competitionSlug,
         commitSha: commitSha,
         repoUrl: 'https://github.com/7tomars/tiny-chess-engine',
+        signer: {
+            address: signer.address,
+            signMessage: signer.signMessage
+        },
         files: [
             { path: 'main.py', content: fs.readFileSync(mainPyPath) },
             { path: 'transcripts/session.jsonl', content: fs.readFileSync(transcriptFile) }
