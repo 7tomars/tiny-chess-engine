@@ -44,6 +44,7 @@ async function submit() {
     const result = await client.entries.submit({
         competition: competitionSlug,
         commitSha: commitSha,
+        repoUrl: 'https://github.com/7tomars/tiny-chess-engine',
         files: [
             { path: 'main.py', content: fs.readFileSync(mainPyPath) },
             { path: 'transcripts/session.jsonl', content: fs.readFileSync(transcriptFile) }
